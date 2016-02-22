@@ -1,0 +1,63 @@
+CREATE TABLE Teacher
+       (PIN INT
+        CONSTRAINT TeacherPrimary PRIMARY KEY,
+        TeachName VARCHAR(35),
+        DeptName VARCHAR(35),
+        TeachPost VARCHAR(35),
+        DateHire   DATETIME);
+CREATE TABLE Subject
+       (IDSubject INT
+        CONSTRAINT SubjectPrimary PRIMARY KEY,
+        NameSubject VARCHAR(35)
+        CONSTRAINT SubjectNameSubjectUnique  UNIQUE);
+CREATE TABLE Report
+        (IDReport INT
+         CONSTRAINT ReportPrimary PRIMARY KEY,
+         NameReport VARCHAR(35)
+         CONSTRAINT ReportNameReportUnique  UNIQUE);
+CREATE TABLE Work
+        (IDWork INT
+         CONSTRAINT WorkPrimary PRIMARY KEY,
+         NameWork VARCHAR(35)
+         CONSTRAINT WorkNameWorkUnique  UNIQUE);   
+CREATE TABLE SGroup
+        (IDGroup INT
+         CONSTRAINT SGroupPrimary PRIMARY KEY,
+         NameGroup VARCHAR(35)
+         CONSTRAINT GroupNameGroupUnique  UNIQUE);                 
+CREATE TABLE Student
+        (NRecordBook VARCHAR(6)
+         CONSTRAINT StudentPrimary PRIMARY KEY,
+         StName VARCHAR(35),
+         IDGroup INT
+         CONSTRAINT StudentSGroupForeign FOREIGN KEY (IDGroup) REFERENCES SGroup,
+         SPasport VARCHAR(4),
+         NPasport VARCHAR(6),
+         DataPasport DATETIME,
+         NameDeptPasport VARCHAR(35),
+         INN VARCHAR(10)
+         CONSTRAINT StudentPasportUnique  UNIQUE(SPasport,NPasport,DataPasport,NameDeptPasport, INN));    
+ CREATE TABLE UPlan
+        (IDSubject INT,
+         NTerm  VARCHAR(2),
+         IDWork INT,
+         IDGroup INT,
+         PIN INT,
+         Clock NUMERIC(3),
+         CONSTRAINT UPlanPrimary PRIMARY KEY ( IDSubject,NTerm,IDWork,IDGroup,PIN),
+         CONSTRAINT UPlanSubjectForeign FOREIGN KEY  (IDSubject) REFERENCES Subject,
+         CONSTRAINT UPlanWorkForeign FOREIGN KEY  (IDWork) REFERENCES  Work,
+         CONSTRAINT UPlanSGroupForeign FOREIGN KEY  (IDGroup) REFERENCES  SGroup,
+         CONSTRAINT UPlanTeacherForeign FOREIGN KEY (PIN)   REFERENCES Teacher);  
+ CREATE TABLE Progress
+       (NRecordBook VARCHAR(6),
+        PIN INT,
+        IDSubject INT,
+        IDReport INT,
+        NTerm VARCHAR(2),
+        Mark SMALLINT,
+  	CONSTRAINT ProgressPrimary PRIMARY KEY (NRecordBook,IDSubject,IDReport,PIN),
+        CONSTRAINT ProgressStudentForeign FOREIGN KEY (NRecordBook)     REFERENCES Student,  	
+        CONSTRAINT ProgressSubjectForeign FOREIGN KEY  (IDSubject)     REFERENCES Subject,
+ 	CONSTRAINT ProgressReportForeign FOREIGN KEY (IDReport)     REFERENCES Report,
+  	CONSTRAINT ProgressTeacherForeign FOREIGN KEY (PIN)     REFERENCES Teacher);   
